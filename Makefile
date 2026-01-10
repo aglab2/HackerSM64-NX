@@ -512,7 +512,6 @@ CFLAGS += -Wno-overflow
 ASMFLAGS = -G 3 $(OPT_FLAGS) $(TARGET_CFLAGS) -mips3 $(DEF_INC_CFLAGS) -mno-shared -march=vr4300 -mfix4300 $(ABI) -fno-stack-protector -fno-common -mno-abicalls -fno-strict-aliasing -ffreestanding -fwrapv -Wall -Wextra -Wno-trigraphs
 
 ASFLAGS     := -march=vr4300 $(ABI) $(foreach i,$(INCLUDE_DIRS),-I$(i)) $(foreach d,$(DEFINES),--defsym $(d))
-RSPASMFLAGS := $(foreach d,$(DEFINES),-definelabel $(subst =, ,$(d)))
 
 # C preprocessor flags
 CPPFLAGS := -P -Wno-trigraphs $(DEF_INC_CFLAGS)
@@ -541,12 +540,6 @@ ifeq ($(GZIPVER),std)
 GZIP                  := gzip
 else
 GZIP                  := libdeflate-gzip
-endif
-# Use the system installed armips if available. Otherwise use the one provided with this repository.
-ifneq (,$(call find-command,armips))
-  RSPASM              := armips
-else
-  RSPASM              := $(TOOLS_DIR)/armips
 endif
 
 ifneq (,$(call find-command,wslview))
@@ -861,11 +854,6 @@ $(BUILD_DIR)/%.o: $(BUILD_DIR)/%.c
 $(BUILD_DIR)/%.o: %.s
 	$(call print,Assembling:,$<,$@)
 	$(V)$(CROSS)gcc -c $(ASMFLAGS) $(foreach i,$(INCLUDE_DIRS),-Wa,-I$(i)) -x assembler-with-cpp -MMD -MF $(BUILD_DIR)/$*.d  -o $@ $<
-
-# Assemble RSP assembly code
-$(BUILD_DIR)/rsp/%.bin $(BUILD_DIR)/rsp/%_data.bin: rsp/%.s
-	$(call print,Assembling:,$<,$@)
-	$(V)$(RSPASM) -sym $@.sym $(RSPASMFLAGS) -strequ CODE_FILE $(BUILD_DIR)/rsp/$*.bin -strequ DATA_FILE $(BUILD_DIR)/rsp/$*_data.bin $<
 
 # Run linker script through the C preprocessor
 $(BUILD_DIR)/$(LD_SCRIPT): $(LD_SCRIPT) $(BUILD_DIR)/goddard.txt
