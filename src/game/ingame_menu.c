@@ -1690,6 +1690,7 @@ void render_pause_my_score_coins(void) {
             print_generic_string_aligned(SCREEN_CENTER_X, PAUSE_MENU_COURSE_Y, courseName, TEXT_ALIGN_CENTER);
         }
 
+        render_hacktice_setting(90, 40);
         gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
     }
     else
@@ -1953,6 +1954,8 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
     if (Hacktice_gEnabled)
         Hacktice_onPause();
 
+    render_hacktice_setting(x - 20, y + 120);
+
     if (gDialogLineNum <= COURSE_NUM_TO_INDEX(COURSE_STAGES_MAX)) { // Main courses
         courseName = segmented_to_virtual(courseNameTbl[gDialogLineNum]);
         print_generic_string(x - 50, y + 35, courseName);
@@ -1974,8 +1977,6 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
                                                              COURSE_NUM_TO_INDEX(COURSE_MAX)));
         sprintf(str, LANG_ARRAY(textStarX), countText);
         print_generic_string_aligned(x, y + 18, str, TEXT_ALIGN_CENTER);
-
-        render_hacktice_setting(x - 20, y + 120);
     }
 
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
