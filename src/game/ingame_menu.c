@@ -1818,7 +1818,7 @@ void render_pause_castle_menu_box(s16 x, s16 y) {
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 
     create_dl_translation_matrix(MENU_MTX_PUSH, x - 9, y - 101, 0);
-    create_dl_rotation_matrix(MENU_MTX_NOPUSH, 270.0f, 0, 0, 1.0f);
+    create_dl_rotation_matrix(MENU_MTX_NOPUSH, -90.0f, 0, 0, 1.0f);
     gSPDisplayList(gDisplayListHead++, dl_draw_triangle);
     gSPPopMatrix(gDisplayListHead++, G_MTX_MODELVIEW);
 }
