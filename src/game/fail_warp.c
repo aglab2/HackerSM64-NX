@@ -2,6 +2,7 @@
 
 #include "behavior_data.h"
 #include "game/area.h"
+#include "game/interaction.h"
 #include "game/level_update.h"
 #include "game/mario.h"
 
