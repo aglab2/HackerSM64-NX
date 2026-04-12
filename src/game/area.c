@@ -312,6 +312,7 @@ void set_vi_mode(int enabled)
 }
 
 void load_area(s32 index) {
+    fail_warp_drop_last_safe_pos();
     int mode = 7;
     set_vi_mode(mode);
 
