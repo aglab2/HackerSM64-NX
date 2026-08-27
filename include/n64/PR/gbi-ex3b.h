@@ -2897,19 +2897,6 @@ other segments. */
 #define gsSPPerspNormalize(s)       gsMoveHalfwd(    G_MW_FX, G_MWO_PERSPNORM, (s))
 
 /**
- * @brief Clipping Macros
- * @deprecated
- * encodes SP no-ops it is not possible to change the clip ratio from 2 in F3DEX3.
- */
-#define gSPClipRatio(pkt, r) gSPNoOp(pkt)
-/**
- * @brief @copybrief gSPClipRatio
- * @deprecated
- * @copydetails gSPClipRatio
- */
-#define gsSPClipRatio(r) gsSPNoOp()
-
-/**
  * @brief Load new MVP matrix directly.
  * 
  * This is no longer supported as it was not used in production games.
@@ -3002,6 +2989,10 @@ _DW({                                         \
     gsSPAmbOcclusionAmbDir(amb, dir),         \
     gsSPAmbOcclusionPoint(point)
 
+// In my F3DEX3 fork clip ratio replaces amb occlusion
+#define gSPClipRatio(pkt, r) gSPAmbOcclusionAmb(pkt, r)
+#define gsSPClipRatio(r) gsSPAmbOcclusionAmb(r)
+
 /**
  * Fresnel - Feature suggested by thecozies
  * Enabled with the G_FRESNEL bit in geometry mode.
@@ -3065,6 +3056,7 @@ _DW({                                         \
     gsMoveWd(G_MW_FX, G_MWO_FRESNEL_SCALE, \
         (_SHIFTL((scale), 16, 16) | _SHIFTL((offset), 0, 16)))
 
+#if 0
 /**
  * Attribute offsets
  * These are added to ST values after vertices are loaded and transformed.
@@ -3082,7 +3074,12 @@ _DW({                                         \
 #define gsSPAttrOffsetST(s, t) \
     gsMoveWd(G_MW_FX, G_MWO_ATTR_OFFSET_S, \
         (_SHIFTL((s), 16, 16) | _SHIFTL((t), 0, 16)))
-
+#else
+#define gSPAttrOffsetZ(pkt, z) \
+    gMoveHalfwd(pkt, G_MW_FX, G_MWO_ATTR_OFFSET_S, z)
+#define gsSPAttrOffsetZ(z) \
+    gsMoveHalfwd(G_MW_FX, G_MWO_ATTR_OFFSET_S, z)
+#endif
     
 /**
  * Alpha compare culling. This was originally created as an optimization for cel
